@@ -1,20 +1,27 @@
 ﻿@page "/todo"
 @using SmartBlazor.Data
 
-<h3>Todo (@todos.Count(todo => !todo.IsDone))</h3>
 
-<ul>
-    @foreach (var todo in todos)
-    {
-        <li>
-            <input type="checkbox" @bind="todo.IsDone" />
-            <input @bind="todo.Title" />
-        </li>
-    }
-</ul>
+<section class="section">
+    <div class="is-size-2">
+    Todo (@todos.Count(todo => !todo.IsDone))
+    </div>
+    <div>
+        <ul>
+            @foreach (var todo in todos)
+            {
+                <li>
+                    <input class="input" type="checkbox" @bind="todo.IsDone" />
+                    <input @bind="todo.Title" />
+                </li>
+            }
+        </ul>
+        <input class="input" type="text" placeholder="Something todo" @bind="newTodo" />
+        <button class="button is-link" @onclick="AddTodo">Add todo</button>
+    </div>
+</section>
 
-<input placeholder="Something todo" @bind="newTodo" />
-<button  @onclick="AddTodo">Add todo</button>
+
 
 @code {
     private List<TodoItem> todos = new();
