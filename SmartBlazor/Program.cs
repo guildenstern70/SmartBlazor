@@ -9,6 +9,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using SmartBlazor.Data;
+using SmartBlazor.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

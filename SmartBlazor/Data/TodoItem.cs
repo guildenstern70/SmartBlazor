@@ -7,12 +7,17 @@
  **/
 
 
-namespace SmartBlazor.Data
+namespace SmartBlazor.Data;
+
+
+public class TodoItem
 {
-    public class TodoItem
+    public TodoItem()
     {
-        public string Title { get; set; }
-        public bool IsDone { get; set; }
+        this.Title = "";
     }
 
+    public string Title { get; set; }
+    public bool IsDone { get; set; }
 }
+
