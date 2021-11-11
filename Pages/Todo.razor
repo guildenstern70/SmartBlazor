@@ -3,9 +3,9 @@
 
 
 <section class="section">
-    <div class="is-size-2">
-    Todo (@todos.Count(todo => !todo.IsDone))
-    </div>
+
+    <SmartBlazor.Components.PageHeader Title="@TodoCount" />
+
     <div class="block">
         <ul>
             @foreach (var todo in todos)
@@ -39,6 +39,15 @@
 @code {
     private List<TodoItem> todos = new();
     private string? newTodo;
+
+    public string TodoCount
+    {
+        get
+        {
+            return "ToDo (" + this.todos.Count(todo => !todo.IsDone).ToString() + ")";
+        }
+
+    }
 
     private void AddTodo()
     {
