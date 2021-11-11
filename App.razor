@@ -1,4 +1,12 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿ @**
+  
+  Project SmartBlazor
+  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  This software is licensed under MIT License. See LICENSE.
+  
+ **@
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />

@@ -1,3 +1,11 @@
+/**
+ * 
+ * Project SmartBlazor
+ * Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+ * This software is licensed under MIT License. See LICENSE.
+ * 
+ **/
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using SmartBlazor.Data;
