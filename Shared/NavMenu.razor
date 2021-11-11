@@ -1,4 +1,4 @@
-﻿<nav class="navbar" role="navigation" aria-label="main navigation">
+﻿<nav class="navbar mx-3 is-fixed-top has-shadow" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
 
     <a class="navbar-item" href="https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor" target="_blank">
@@ -12,30 +12,25 @@
     </a>
   </div>
 
-  <div id="navbarBasicExample" class="navbar-menu">
+  <div id="navbarBasic" class="navbar-menu">
     <div class="navbar-start">
-        <NavLink class="navbar-item" href="" Match="NavLinkMatch.All">
+
+        <NavLink class="navbar-item" href="" Match="NavLinkMatch.All" ActiveClass="is-active">
             Home
         </NavLink>
 
-        <NavLink href="counter" class="navbar-item">
+        <NavLink class="navbar-item" href="counter" ActiveClass="is-active">
             Counter
         </NavLink>
 
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More
-        </a>
+        <NavLink href="fetchdata" class="navbar-item" ActiveClass="is-active">
+            Weather
+        </NavLink>
 
-        <div class="navbar-dropdown">
-          <NavLink href="fetchdata" class="navbar-item">
-            Fetch Data
-          </NavLink>
-          <NavLink href="todo" class="navbar-item">
-            ToDo List
-          </NavLink>
-        </div>
-      </div>
+        <NavLink href="todo" class="navbar-item" ActiveClass="is-active">
+            ToDo
+        </NavLink>
+
     </div>
 
     <div class="navbar-end">

@@ -6,18 +6,31 @@
     <div class="is-size-2">
     Todo (@todos.Count(todo => !todo.IsDone))
     </div>
-    <div>
+    <div class="block">
         <ul>
             @foreach (var todo in todos)
             {
                 <li>
-                    <input class="input" type="checkbox" @bind="todo.IsDone" />
-                    <input @bind="todo.Title" />
+                    <div class="field">
+                        <label class="checkbox">
+                          <input type="checkbox" @bind="todo.IsDone">
+                          @todo.Title
+                        </label>
+                    </div>
                 </li>
             }
         </ul>
-        <input class="input" type="text" placeholder="Something todo" @bind="newTodo" />
-        <button class="button is-link" @onclick="AddTodo">Add todo</button>
+    </div>
+    <div class="block mt-5">
+        <div class="field">
+          <label class="label">Add a new to-do item</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Something to do..." @bind="newTodo" />
+          </div>
+        </div>
+        <div class="field">
+          <button class="button is-link" @onclick="AddTodo">Add todo</button>
+        </div>
     </div>
 </section>
 
