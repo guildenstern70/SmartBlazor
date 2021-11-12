@@ -1,0 +1,32 @@
+﻿ @**
+  
+  Project SmartBlazor
+  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  This software is licensed under MIT License. See LICENSE.
+  
+ **@
+
+
+@page "/registeredok"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Registration Done</PageTitle>
+
+<section class="section">
+
+    <SmartBlazor.Components.PageHeader Title="Registration OK" />
+
+    <div>
+        <p>You may now login to the system</p>
+        <button class="button is-link mt-4" @onclick="NavigateToLogin">Click here to login</button>
+    </div>
+</section>
+
+
+@code {
+
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

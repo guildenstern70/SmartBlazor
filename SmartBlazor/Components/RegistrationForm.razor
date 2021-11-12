@@ -1,0 +1,156 @@
+﻿@using SmartBlazor.Service
+@inject SiteUserService UserService
+@inject NavigationManager NavigationManager
+@inject ILogger<RegistrationForm> Logger
+
+<form>
+    <div class="field">
+        <label class="label">Username</label>
+        <div class="control has-icons-left has-icons-right">
+        <input class="input @UsernameCtrl.Main" 
+                type="text" 
+                placeholder="Choose a username"
+                @onblur="CheckUsernameAvailable"
+                @bind="_candidateUsername">
+        <span class="icon is-small is-left">
+            <i class="fas fa-user"></i>
+        </span>
+        <span class="@UsernameCtrl.CheckIconStyle">
+            <i class="@UsernameCtrl.CheckIcon"></i>
+        </span>
+        </div>
+        <p class="@UsernameCtrl.Helper">@UsernameCtrl.HelperText</p>
+    </div>
+
+    <div class="field">
+        <label class="label">Password</label>
+        <div class="control has-icons-left has-icons-right">
+        <input class="input @PasswordCtrl.Main" 
+               type="password" 
+               placeholder="Password"
+               @onblur="ValidatePassword"
+               @bind="_candidatePassword">
+        <span class="icon is-small is-left">
+            <i class="fas fa-key"></i>
+        </span>
+        <span class="@PasswordCtrl.CheckIconStyle">
+            <i class="@PasswordCtrl.CheckIcon"></i>
+        </span>
+        </div>
+        <p class="@PasswordCtrl.Helper">@PasswordCtrl.HelperText</p>
+    </div>
+
+    <div class="field mt-3">
+        <div class="control">
+        <label class="checkbox">
+            <input type="checkbox">
+            I agree to the <a href="#">terms and conditions</a>
+        </label>
+        </div>
+    </div>
+
+    <div class="field is-grouped mt-3">
+        <div class="control">
+            <button type="button" class="button is-link" @attributes="SubmitAttributes" @onclick="Register">Submit</button>
+        </div>
+        <div class="control">
+            <a href="/" class="button is-link is-light">Cancel</a>
+        </div>
+    </div>
+</form>
+
+
+@code {
+
+    private string _candidateUsername = "";
+    private string _candidatePassword = "";
+    private bool isUsernameOk = false;
+    private bool isPasswordOk = false;
+    private Dictionary<string, object> SubmitAttributes { get; set; } =
+        new()
+            {
+                { "disabled", "disabled" }
+            };
+
+    public static class UsernameCtrl
+    {
+        public static string Main = "is-info";
+        public static string Helper = "help is-success is-hidden";
+        public static string CheckIconStyle = "icon is-small is-right is-hidden";
+        public static string HelperText = "This username is available";
+        public static string CheckIcon = "fas fa-check";
+    }
+
+    public static class PasswordCtrl
+    {
+        public static string Main = "is-info";
+        public static string Helper = "help is-success is-hidden";
+        public static string CheckIconStyle = "icon is-small is-right is-hidden";
+        public static string HelperText = "This username is available";
+        public static string CheckIcon = "fas fa-check";
+    }
+
+    public void Register()
+    {
+        Logger.LogInformation("Registering new user " + _candidateUsername + "...");
+        UserService.AddUser(_candidateUsername, _candidatePassword);
+        Logger.LogInformation("Done.");
+        NavigationManager.NavigateTo("/registeredok");
+    }
+
+    public void ValidatePassword()
+    {
+        if (_candidatePassword.Length >= 8) 
+        {
+            PasswordCtrl.Main = "is-success";
+            PasswordCtrl.Helper = "help is-success";
+            PasswordCtrl.CheckIconStyle = "icon is-small is-right";
+            PasswordCtrl.HelperText = "";
+            PasswordCtrl.CheckIcon = "fas fa-check";
+            isUsernameOk = true;
+        }
+        else
+        {
+            PasswordCtrl.Main = "is-danger";
+            PasswordCtrl.Helper = "help is-danger";
+            PasswordCtrl.CheckIconStyle = "icon is-small is-right";
+            PasswordCtrl.HelperText = "Password must have at least 8 characters";
+            PasswordCtrl.CheckIcon = "fas fa-exclamation";            
+        }
+
+        if (isUsernameOk && isPasswordOk)
+        {
+            SubmitAttributes.Remove("disabled");
+        }
+    }
+
+    public void CheckUsernameAvailable()
+    {
+        if (UserService.IsUsernameAvailable(_candidateUsername)) 
+        {
+            UsernameCtrl.Main = "is-success";
+            UsernameCtrl.Helper = "help is-success";
+            UsernameCtrl.CheckIconStyle = "icon is-small is-right";
+            UsernameCtrl.HelperText = "This username is available";
+            UsernameCtrl.CheckIcon = "fas fa-check";
+            isPasswordOk = true;
+        }
+        else 
+        {
+            UsernameCtrl.Main = "is-danger";
+            UsernameCtrl.Helper = "help is-danger";
+            UsernameCtrl.CheckIconStyle = "icon is-small is-right";
+            UsernameCtrl.HelperText = "This username is NOT available";
+            UsernameCtrl.CheckIcon = "fas fa-exclamation";
+        }
+
+        if (isUsernameOk && isPasswordOk)
+        {
+            SubmitAttributes.Remove("disabled");
+        }
+    }
+
+
+
+}
+

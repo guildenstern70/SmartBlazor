@@ -18,6 +18,10 @@ namespace SmartBlazor.Service
             new SiteUser("alessio", "doctor")
         };
 
+        public bool IsUsernameAvailable(string username)
+        {
+            return this.GetUser(username) == null;
+        }
 
         public SiteUser? GetUser(string username)
         {
