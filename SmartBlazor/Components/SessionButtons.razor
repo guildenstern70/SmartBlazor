@@ -1,0 +1,60 @@
+﻿ @**
+  
+  Project SmartBlazor
+  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  This software is licensed under MIT License. See LICENSE.
+  
+ **@
+
+@using SmartBlazor.Service
+@inject ISessionService SessionService
+@inject ILogger<SessionButtons> Logger
+
+<div class="buttons">
+
+    @if (_userSession == null)
+    {
+        <a href="/register" class="button is-info">
+            <strong>Sign up</strong>
+        </a>
+        <a href="/login" class="button is-light">
+            Log in
+        </a>
+    }
+    else
+    {
+        <div class="mx-4"> Logged user: <strong>@_userSession</strong></div>
+            <a href="/logout" class="button is-light">
+            Log out
+        </a>        
+    }
+            
+</div>
+
+@code 
+{
+    private string? _userSession;
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        var loggedUserFromService = await SessionService.GetLoggedUser();
+        if (loggedUserFromService == null)
+        {
+            Logger.LogInformation("No user is logged");
+        }
+        else
+        {
+            
+            if (loggedUserFromService != this._userSession)
+            {
+                this._userSession = loggedUserFromService;
+                // Force rendering stating that state has changed
+                this.StateHasChanged();
+            }
+            Logger.LogInformation("User " + this._userSession + " is logged.");
+        }
+
+    }
+
+
+}

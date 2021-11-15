@@ -10,8 +10,9 @@ using SmartBlazor.Data;
 
 namespace SmartBlazor.Service
 {
-    public class SiteUserService
+    public class SiteUserService : ISiteUserService
     {
+
         private readonly List<SiteUser> users = new()
         {
             new SiteUser("guest", "guest"),
@@ -21,6 +22,18 @@ namespace SmartBlazor.Service
         public bool IsUsernameAvailable(string username)
         {
             return this.GetUser(username) == null;
+        }
+
+        public bool Login(string username, string password)
+        {
+            var user = this.GetUser(username);
+            if (user == null)
+                return false;
+            if (user.Password.Equals(password))
+            {
+                return true;
+            }
+            return false;
         }
 
         public SiteUser? GetUser(string username)

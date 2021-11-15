@@ -1,5 +1,13 @@
-﻿@using SmartBlazor.Service
-@inject SiteUserService UserService
+﻿ @**
+  
+  Project SmartBlazor
+  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  This software is licensed under MIT License. See LICENSE.
+  
+ **@
+
+@using SmartBlazor.Service
+@inject ISiteUserService UserService
 @inject NavigationManager NavigationManager
 @inject ILogger<RegistrationForm> Logger
 
@@ -11,6 +19,7 @@
                 type="text" 
                 placeholder="Choose a username"
                 @onblur="CheckUsernameAvailable"
+                @onclick="CleanUp"
                 @bind="_candidateUsername">
         <span class="icon is-small is-left">
             <i class="fas fa-user"></i>
@@ -28,8 +37,27 @@
         <input class="input @PasswordCtrl.Main" 
                type="password" 
                placeholder="Password"
-               @onblur="ValidatePassword"
+               @onclick="CleanUp"
                @bind="_candidatePassword">
+        <span class="icon is-small is-left">
+            <i class="fas fa-key"></i>
+        </span>
+        <span class="@PasswordCtrl.CheckIconStyle">
+            <i class="@PasswordCtrl.CheckIcon"></i>
+        </span>
+        </div>
+        <p class="@PasswordCtrl.Helper">@PasswordCtrl.HelperText</p>
+    </div>
+
+    <div class="field">
+        <label class="label">Password Confirm</label>
+        <div class="control has-icons-left has-icons-right">
+        <input class="input @PasswordCtrl.Main" 
+               type="password" 
+               placeholder="Password"
+               @onblur="ValidatePassword"
+               @onclick="CleanUp"
+               @bind="_confirmationPassword">
         <span class="icon is-small is-left">
             <i class="fas fa-key"></i>
         </span>
@@ -49,7 +77,7 @@
         </div>
     </div>
 
-    <div class="field is-grouped mt-3">
+    <div class="field is-grouped mt-5">
         <div class="control">
             <button type="button" class="button is-link" @attributes="SubmitAttributes" @onclick="Register">Submit</button>
         </div>
@@ -59,13 +87,15 @@
     </div>
 </form>
 
-
 @code {
 
     private string _candidateUsername = "";
     private string _candidatePassword = "";
+    private string _confirmationPassword = "";
+
     private bool isUsernameOk = false;
     private bool isPasswordOk = false;
+
     private Dictionary<string, object> SubmitAttributes { get; set; } =
         new()
             {
@@ -98,8 +128,35 @@
         NavigationManager.NavigateTo("/registeredok");
     }
 
+    public void CleanUp()
+    {
+        PasswordCtrl.Main = "is-info";
+        PasswordCtrl.Helper = "help is-success is-hidden";
+        PasswordCtrl.CheckIconStyle = "icon is-small is-right is-hidden";
+        PasswordCtrl.HelperText = "";
+
+        UsernameCtrl.Main = "is-success";
+        UsernameCtrl.Helper = "help is-success is-hidden";
+        UsernameCtrl.CheckIconStyle = "icon is-small is-right is-hidden";
+        UsernameCtrl.HelperText = "";
+
+        SubmitAttributes.Clear();
+        SubmitAttributes.Add("disabled", "disabled");
+    }
+
     public void ValidatePassword()
     {
+        if (!(_confirmationPassword.Equals(_candidatePassword)))
+        {
+
+            PasswordCtrl.Main = "is-danger";
+            PasswordCtrl.Helper = "help is-danger";
+            PasswordCtrl.CheckIconStyle = "icon is-small is-right";
+            PasswordCtrl.HelperText = "Passwords do not match.";
+            PasswordCtrl.CheckIcon = "fas fa-exclamation";
+            return;
+        }
+
         if (_candidatePassword.Length >= 8) 
         {
             PasswordCtrl.Main = "is-success";
@@ -149,8 +206,6 @@
             SubmitAttributes.Remove("disabled");
         }
     }
-
-
 
 }
 

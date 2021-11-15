@@ -16,8 +16,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+// Global Services
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddSingleton<SiteUserService>();
+
+// Services tied to HTTP Session
+builder.Services.AddScoped<ISiteUserService, SiteUserService>();
+builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
+
+// Logger
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
@@ -26,7 +36,6 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
-
 
 app.UseStaticFiles();
 

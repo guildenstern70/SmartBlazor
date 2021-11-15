@@ -1,0 +1,75 @@
+﻿ @**
+  
+  Project SmartBlazor
+  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  This software is licensed under MIT License. See LICENSE.
+  
+ **@
+
+@using SmartBlazor.Service
+@inject ISiteUserService UserService
+@inject ISessionService  SessionService
+@inject NavigationManager NavigationManager
+@inject ILogger<LoginForm> Logger
+
+<form>
+    <div class="field">
+        <label class="label">Username</label>
+        <div class="control has-icons-left has-icons-right">
+        <input class="input is-info" 
+                type="text" 
+                placeholder="Choose a username"
+                @bind="_candidateUser">
+        <span class="icon is-small is-left">
+            <i class="fas fa-user"></i>
+        </span>
+        </div>
+        <p class="help is-info">Insert your username here. If unsure, type 'guest'</p>
+    </div>
+
+    <div class="field">
+        <label class="label">Password</label>
+        <div class="control has-icons-left has-icons-right">
+        <input class="input is-info" 
+               type="password" 
+               placeholder="Password"
+               @bind="_candidatePassword">
+        <span class="icon is-small is-left">
+            <i class="fas fa-key"></i>
+        </span>
+        </div>
+        <p class="help is-info">Insert your password here. If unsure, type 'guest'</p>
+    </div>
+
+    <div class="field is-grouped mt-5">
+        <div class="control">
+            <button type="button" class="button is-link" @onclick="Login">Login</button>
+        </div>
+        <div class="control">
+            <a href="/" class="button is-link is-light">Cancel</a>
+        </div>
+    </div>
+
+</form>
+
+@code 
+{
+    private string _candidateUser = "";
+    private string _candidatePassword = "";
+
+    public async void Login()
+    {
+        Logger.LogInformation("User login request...");
+        if (UserService.Login(_candidateUser, _candidatePassword))
+        {
+            Logger.LogInformation("Login OK, user is " + _candidateUser);
+            await SessionService.Login(_candidateUser);
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            Logger.LogWarning("Login error: bad username or password");
+        }
+    }
+
+}
