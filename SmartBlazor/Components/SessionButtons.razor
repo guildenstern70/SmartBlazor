@@ -39,7 +39,7 @@
     protected override async void OnAfterRender(bool firstRender)
     {
         this._userSession = await SessionService.GetLoggedUser();
-        // Force rendering stating that state has changed
+        // Force rendering since state has changed
         this._hideOrNot = "buttons";
         this.StateHasChanged();
     }

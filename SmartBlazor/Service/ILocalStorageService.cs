@@ -6,12 +6,13 @@
 * 
 **/
 
-namespace SmartBlazor.Service
+using System.Threading.Tasks;
+
+namespace SmartBlazor.Service;
+
+public interface ILocalStorageService
 {
-    public interface ILocalStorageService
-    {
-        Task<T?> GetItem<T>(string key);
-        Task RemoveItem(string key);
-        Task SetItem<T>(string key, T value);
-    }
+    Task<T?> GetItem<T>(string key);
+    Task RemoveItem(string key);
+    Task SetItem<T>(string key, T value);
 }

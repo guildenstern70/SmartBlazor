@@ -6,13 +6,13 @@
  * 
  **/
 
+using System.Threading.Tasks;
 
-namespace SmartBlazor.Service
+namespace SmartBlazor.Service;
+
+public interface ISessionService
 {
-    public interface ISessionService
-    {
-        Task<string?> GetLoggedUser();
-        Task Login(string username);
-        void Logout();
-    }
+    Task<string?> GetLoggedUser();
+    Task Login(string username);
+    void Logout();
 }
