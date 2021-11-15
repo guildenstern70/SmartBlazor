@@ -8,13 +8,14 @@
 
 using SmartBlazor.Data;
 
-namespace SmartBlazor.Service
+namespace SmartBlazor.Service;
+
+public interface ISiteUserService
 {
-    public interface ISiteUserService
-    {
-        void AddUser(string username, string password);
-        SiteUser? GetUser(string username);
-        bool IsUsernameAvailable(string username);
-        bool CheckLogin(string username, string password);
-    }
+    void AddUser(string username, string password);
+    SiteUser? GetUser(string username);
+    bool IsUsernameAvailable(string username);
+    bool CheckLogin(string username, string password);
 }
+
+
