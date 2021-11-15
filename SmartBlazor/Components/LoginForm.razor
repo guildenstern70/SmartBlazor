@@ -60,7 +60,7 @@
     public async void Login()
     {
         Logger.LogInformation("User login request...");
-        if (UserService.Login(_candidateUser, _candidatePassword))
+        if (UserService.CheckLogin(_candidateUser, _candidatePassword))
         {
             Logger.LogInformation("Login OK, user is " + _candidateUser);
             await SessionService.Login(_candidateUser);

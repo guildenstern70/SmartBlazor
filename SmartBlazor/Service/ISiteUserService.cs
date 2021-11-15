@@ -15,6 +15,6 @@ namespace SmartBlazor.Service
         void AddUser(string username, string password);
         SiteUser? GetUser(string username);
         bool IsUsernameAvailable(string username);
-        bool Login(string username, string password);
+        bool CheckLogin(string username, string password);
     }
 }

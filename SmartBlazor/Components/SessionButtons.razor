@@ -10,7 +10,7 @@
 @inject ISessionService SessionService
 @inject ILogger<SessionButtons> Logger
 
-<div class="buttons">
+<div class="@_hideOrNot">
 
     @if (_userSession == null)
     {
@@ -34,26 +34,14 @@
 @code 
 {
     private string? _userSession;
+    private string _hideOrNot = "buttons hidden";
 
     protected override async void OnAfterRender(bool firstRender)
     {
-        var loggedUserFromService = await SessionService.GetLoggedUser();
-        if (loggedUserFromService == null)
-        {
-            Logger.LogInformation("No user is logged");
-        }
-        else
-        {
-            
-            if (loggedUserFromService != this._userSession)
-            {
-                this._userSession = loggedUserFromService;
-                // Force rendering stating that state has changed
-                this.StateHasChanged();
-            }
-            Logger.LogInformation("User " + this._userSession + " is logged.");
-        }
-
+        this._userSession = await SessionService.GetLoggedUser();
+        // Force rendering stating that state has changed
+        this._hideOrNot = "buttons";
+        this.StateHasChanged();
     }
 
 

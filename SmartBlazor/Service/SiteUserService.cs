@@ -24,7 +24,7 @@ namespace SmartBlazor.Service
             return this.GetUser(username) == null;
         }
 
-        public bool Login(string username, string password)
+        public bool CheckLogin(string username, string password)
         {
             var user = this.GetUser(username);
             if (user == null)

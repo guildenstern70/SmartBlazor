@@ -1,0 +1,22 @@
+﻿ @**
+  
+  Project SmartBlazor
+  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  This software is licensed under MIT License. See LICENSE.
+  
+ **@
+
+@page "/logout"
+
+@using SmartBlazor.Service
+@inject ISessionService  SessionService
+@inject NavigationManager NavigationManager
+
+@code 
+{
+    protected override void OnInitialized()
+    {
+        SessionService.Logout();
+        NavigationManager.NavigateTo("/");
+    }
+}

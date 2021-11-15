@@ -36,8 +36,10 @@ namespace SmartBlazor.Service
 
         public async void Logout()
         {
+            this._logger.LogInformation("Logging out user");
             await this._localStorageService.RemoveItem(this._userKey);
         }
+
 
     }
 }
