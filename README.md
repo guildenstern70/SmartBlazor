@@ -4,6 +4,14 @@
 
 A template application featuring Microsoft Blazor Tech with ASP.NET Core 6.x
 
+This code requires:
+
+-> Microsoft .NET Core 6.x
+-> Microsoft ASP.NET Core 6.x
+
+You may download requirements for any platform here: https://dotnet.microsoft.com/download/dotnet/6.0
+
+
 ## Container
 
 ### Build as Docker image
