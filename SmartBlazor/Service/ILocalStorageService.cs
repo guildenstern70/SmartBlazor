@@ -6,8 +6,6 @@
 * 
 **/
 
-using System.Threading.Tasks;
-
 namespace SmartBlazor.Service;
 
 public interface ILocalStorageService

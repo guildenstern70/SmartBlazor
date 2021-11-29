@@ -6,16 +6,9 @@
  * 
  **/
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SmartBlazor.Data;
 using SmartBlazor.Service;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -31,9 +24,14 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 
 // Logger
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
+builder.Logging.AddSimpleConsole(options =>
+{
+    options.IncludeScopes = true;
+    options.SingleLine = true;
+    options.TimestampFormat = "HH:mm:ss.ffff ";
+});
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

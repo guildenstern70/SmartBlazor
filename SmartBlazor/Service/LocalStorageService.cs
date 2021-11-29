@@ -17,7 +17,7 @@ namespace SmartBlazor.Service;
 **/
 public class LocalStorageService : ILocalStorageService
 {
-    private IJSRuntime _jsRuntime;
+    private readonly IJSRuntime _jsRuntime;
 
     public LocalStorageService(IJSRuntime jsRuntime)
     {
@@ -36,7 +36,8 @@ public class LocalStorageService : ILocalStorageService
 
     public async Task SetItem<T>(string key, T value)
     {
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, JsonSerializer.Serialize(value));
+        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, 
+            JsonSerializer.Serialize(value));
     }
 
     public async Task RemoveItem(string key)

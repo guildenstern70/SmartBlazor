@@ -42,7 +42,7 @@
         <p class="help is-info">Insert your password here. If unsure, type 'guest'</p>
     </div>
 
-     <div class="notification @errorMessageStyle">
+     <div class="notification @_errorMessageStyle">
           <button class="delete" onclick="DisposeError"></button>
           <div class="is-size-6">
           <strong>Login error</strong>
@@ -65,11 +65,11 @@
 {
     private string _candidateUser = "";
     private string _candidatePassword = "";
-    private string errorMessageStyle = "is-danger is-light is-hidden";
+    private string _errorMessageStyle = "is-danger is-light is-hidden";
 
     public void DisposeError()
     {
-        errorMessageStyle = "is-danger is-light is-hidden";
+        _errorMessageStyle = "is-danger is-light is-hidden";
     }
 
     public async void Login()
@@ -83,7 +83,7 @@
         }
         else
         {
-            errorMessageStyle = "is-danger is-light";
+            _errorMessageStyle = "is-danger is-light";
             _candidateUser = "";
             _candidatePassword = "";
             Logger.LogWarning("Login error: bad username or password");
