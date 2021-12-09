@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 		Dockerfile = Dockerfile
+		nuget.config = nuget.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartBlazor.Tests", "SmartBlazor.Tests\SmartBlazor.Tests.csproj", "{C63F8245-F25A-451C-BA8C-6EF370CD325F}"
