@@ -24,7 +24,7 @@ namespace SmartBlazor.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WeatherForecast",
+                name: "WeatherForecasts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -45,7 +45,7 @@ namespace SmartBlazor.Migrations
                 name: "SiteUsers");
 
             migrationBuilder.DropTable(
-                name: "WeatherForecast");
+                name: "WeatherForecasts");
         }
     }
 }

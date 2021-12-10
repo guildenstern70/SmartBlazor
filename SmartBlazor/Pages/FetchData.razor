@@ -10,18 +10,21 @@
 
 <PageTitle>Weather forecast</PageTitle>
 
+@using Microsoft.EntityFrameworkCore
 @using SmartBlazor.Data
 @using SmartBlazor.Service
-@inject WeatherForecastService ForecastService
+
+@implements IDisposable
+@inject IDbContextFactory<SmartBlazorDbContext> DbFactory
 
 <section class="section">
 
     <SmartBlazor.Components.PageHeader Title="Weather forecast" />
 
     <div>
-        <p>This component demonstrates fetching data from a service.</p>
+        <p>Weather Forecast Service:</p>
         <div class="mt-4">
-            @if (forecasts == null)
+            @if (Forecasts == null)
             {
                 <p><em>Loading...</em></p>
             }
@@ -49,7 +52,7 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach (var forecast in forecasts)
+                        @foreach (var forecast in Forecasts)
                         {
                             <tr>
                                 <td>@forecast.Date.ToShortDateString()</td>
@@ -71,10 +74,22 @@
 
 
 @code {
-    private WeatherForecast[]? forecasts;
+
+    private DbSet<WeatherForecast>? Forecasts;
+    private SmartBlazorDbContext? Context;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        Context = DbFactory.CreateDbContext();
+        if (Context is not null && Context.WeatherForecasts is not null)
+        {
+            this.Forecasts = Context.WeatherForecasts;
+        }
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        Context?.Dispose();
     }
 }

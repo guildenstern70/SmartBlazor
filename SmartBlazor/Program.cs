@@ -6,7 +6,9 @@
  * 
  **/
 
+using SmartBlazor.Data;
 using SmartBlazor.Service;
+using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +16,14 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-// Global Services
-builder.Services.AddSingleton<WeatherForecastService>();
-
 // Services tied to HTTP Session
 builder.Services.AddScoped<ISiteUserService, SiteUserService>();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+
+// EF Core 
+builder.Services.AddDbContextFactory<SmartBlazorDbContext>(opt =>
+    opt.UseSqlite($"Data Source={SmartBlazorDbContext.DbPath}"));
 
 // Logger
 builder.Logging.ClearProviders();
@@ -32,6 +35,11 @@ builder.Logging.AddSimpleConsole(options =>
 });
 
 WebApplication app = builder.Build();
+
+// Populate DB
+await using var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateAsyncScope();
+var options = scope.ServiceProvider.GetRequiredService<DbContextOptions<SmartBlazorDbContext>>();
+await DatabaseUtils.EnsureDbCreatedAndSeedAsync(options, 10);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

@@ -35,6 +35,13 @@ If EF Tools are not installed, run
 
     Install-Package Microsoft.EntityFrameworkCore.Tools
 
-then
+then (you may want to delete all 'smartblazor.db.*' files)
 
     Update-Database
+
+
+### Setup DB from scratch
+
+Install-Package Microsoft.EntityFrameworkCore.Tools
+Add-Migration InitialCreate
+Update-Database
