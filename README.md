@@ -25,3 +25,16 @@ You may download requirements for any platform here: https://dotnet.microsoft.co
 ### Run docker image
 
     docker run --publish 80:80 --name SmartBlazor smartblazor:1.0 
+
+
+## Database and Entity Framework Core
+
+### Initialize and populate DB
+
+If EF Tools are not installed, run
+
+    Install-Package Microsoft.EntityFrameworkCore.Tools
+
+then
+
+    Update-Database
