@@ -7,7 +7,7 @@
  **/
 
 
-namespace SmartBlazor.Data;
+namespace SmartBlazor.Data.Model;
 
 
 public class TodoItem

@@ -7,6 +7,7 @@
  **/
 
 using SmartBlazor.Data;
+using SmartBlazor.Data.Model;
 
 namespace SmartBlazor.Service;
 

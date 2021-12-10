@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Dao\" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 

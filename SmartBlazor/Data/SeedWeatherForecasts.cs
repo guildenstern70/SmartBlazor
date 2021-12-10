@@ -1,5 +1,6 @@
 ﻿
 
+using SmartBlazor.Data.Model;
 using System.Diagnostics;
 /**
 * 
@@ -8,42 +9,42 @@ using System.Diagnostics;
 * This software is licensed under MIT License. See LICENSE.
 * 
 **/
-namespace SmartBlazor.Data
+namespace SmartBlazor.Data;
+
+public class SeedWeatherForecasts
 {
-    public class SeedWeatherForecasts
+    private static readonly string[] Summaries = new[]
     {
-        private static readonly string[] Summaries = new[]
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    };
+    
+    public async Task SeedDatabaseWithWeatherForecastsAsync(SmartBlazorDbContext context, int totalCount)
+    {
+        Debug.WriteLine("Seeding Weather Forecasts...");
+        if ((context.WeatherForecasts == null)||!context.WeatherForecasts.Any())
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        public WeatherForecast[] GetForecasts(DateTime startDate, int totalCount)
-        {
-            return Enumerable.Range(1, totalCount).Select(index => new WeatherForecast
-            {
-                Date = startDate.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            }).ToArray();
+            var forecasts = GetForecasts(DateTime.Now, totalCount);
+            context.WeatherForecasts?.AddRange(forecasts);
+            await context.SaveChangesAsync();
         }
-
-        public async Task SeedDatabaseWithWeatherForecastsAsync(SmartBlazorDbContext context, int totalCount)
+        else
         {
-            Debug.WriteLine("Seeding Weather Forecasts...");
-            if ((context.WeatherForecasts == null)||!context.WeatherForecasts.Any())
-            {
-                var forecasts = this.GetForecasts(DateTime.Now, totalCount);
-                context.WeatherForecasts?.AddRange(forecasts);
-                await context.SaveChangesAsync();
-            }
-            else
-            {
-                Debug.WriteLine("Weather Forecasts table already populated...");
+            Debug.WriteLine("Weather Forecasts table already populated...");
 
-            }
         }
-
+    }
+    
+    private static WeatherForecast[] GetForecasts(DateTime startDate, int totalCount)
+    {
+        return Enumerable.Range(1, totalCount).Select(index => new WeatherForecast
+        {
+            Date = startDate.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        }).ToArray();
     }
 
-
 }
+
+
+

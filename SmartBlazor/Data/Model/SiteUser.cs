@@ -6,7 +6,7 @@
  * 
  **/
 
-namespace SmartBlazor.Data;
+namespace SmartBlazor.Data.Model;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

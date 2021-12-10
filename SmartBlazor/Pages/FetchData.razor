@@ -12,10 +12,11 @@
 
 @using Microsoft.EntityFrameworkCore
 @using SmartBlazor.Data
+@using SmartBlazor.Data.Model
 @using SmartBlazor.Service
 
 @implements IDisposable
-@inject IDbContextFactory<SmartBlazorDbContext> DbFactory
+@inject IDbContextFactory<SmartBlazorDbContext> _dbFactory
 
 <section class="section">
 
@@ -24,7 +25,7 @@
     <div>
         <p>Weather Forecast Service:</p>
         <div class="mt-4">
-            @if (Forecasts == null)
+            @if (_forecasts == null)
             {
                 <p><em>Loading...</em></p>
             }
@@ -52,44 +53,68 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach (var forecast in Forecasts)
+                        @foreach (var forecast in _forecasts)
                         {
                             <tr>
                                 <td>@forecast.Date.ToShortDateString()</td>
                                 <td>@forecast.TemperatureC</td>
                                 <td>@forecast.TemperatureF</td>
                                 <td>@forecast.Summary</td>
-                                <td><button type="button" class="button is-small"><i class="fas fa-trash"></i></button></td>
-                                <td><button type="button" class="button is-small"><i class="fas fa-edit"></i></button></td>
+                                <td><button type="button" class="button is-small" 
+                                            @onclick="() => DeleteForecast(forecast)">
+                                            <i class="fas fa-trash"></i>
+                                </button></td>
+                                <td><button type="button" class="button is-small">
+                                    <i class="fas fa-edit"></i>
+                                </button></td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                <button type="button" class="button is-info">Add new</button>
+                <button type="button" class="button is-info" onclick="@AddNewForecast">Add new</button>
             }
         </div>
     </div>
 </section>
+ 
+ 
+ @code {
 
-
-
-@code {
-
-    private DbSet<WeatherForecast>? Forecasts;
-    private SmartBlazorDbContext? Context;
+    private DbSet<WeatherForecast>? _forecasts;
+    private SmartBlazorDbContext? _context;
 
     protected override async Task OnInitializedAsync()
     {
-        Context = DbFactory.CreateDbContext();
-        if (Context is not null && Context.WeatherForecasts is not null)
+        _context = await _dbFactory.CreateDbContextAsync();
+        if (_context?.WeatherForecasts != null)
         {
-            this.Forecasts = Context.WeatherForecasts;
+            _forecasts = _context.WeatherForecasts;
         }
         await base.OnInitializedAsync();
+    }
+     
+     private void AddNewForecast()
+     {
+         if (_context?.WeatherForecasts == null) return;
+         _context.Add(new WeatherForecast()
+         {
+             Date = new DateTime(),
+             TemperatureC = 30,
+             Summary = "Freezing"
+             
+         });
+         _context.SaveChanges();
+     }
+
+    private void DeleteForecast(WeatherForecast forecast)
+    {
+        if (_context?.WeatherForecasts == null) return;
+        _context.Remove(forecast);
+        _context.SaveChanges();
     }
 
     public void Dispose()
     {
-        Context?.Dispose();
+        _context?.Dispose();
     }
 }

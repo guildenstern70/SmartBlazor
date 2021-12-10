@@ -7,13 +7,13 @@
  **/
 
 using SmartBlazor.Data;
+using SmartBlazor.Data.Model;
 
 namespace SmartBlazor.Service;
 
 public class SiteUserService : ISiteUserService
 {
-
-    private readonly List<SiteUser> users = new()
+    private readonly List<SiteUser> _users = new()
     {
         new SiteUser("guest", "guest"),
         new SiteUser("alessio", "doctor")
@@ -38,12 +38,12 @@ public class SiteUserService : ISiteUserService
 
     public SiteUser? GetUser(string username)
     {
-        return this.users.FirstOrDefault(x => x.Username == username);
+        return this._users.FirstOrDefault(x => x.Username == username);
     }
 
     public void AddUser(string username, string password)
     {
-        this.users.Add(new SiteUser(username, password));
+        this._users.Add(new SiteUser(username, password));
     }
 
 }
