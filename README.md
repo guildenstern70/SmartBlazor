@@ -42,6 +42,15 @@ then (you may want to delete all 'smartblazor.db.*' files)
 
 ### Setup DB from scratch
 
-Install-Package Microsoft.EntityFrameworkCore.Tools
-Add-Migration InitialCreate
-Update-Database
+    Install-Package Microsoft.EntityFrameworkCore.Tools
+    Add-Migration InitialCreate
+    Update-Database
+
+or, using dotnet CLI:
+
+    dotnet tool install --global dotnet-ef
+    dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+    dotnet add package Microsoft.EntityFrameworkCore.Tools
+    dotnet ef migrations add InitialCreate
+    dotnet ef database update
+
