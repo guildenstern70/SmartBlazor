@@ -1,16 +1,16 @@
 ﻿ @**
   
   Project SmartBlazor
-  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
   This software is licensed under MIT License. See LICENSE.
   
  **@
 
 @using SmartBlazor.Service
 
-@inject ISiteUserService UserService
-@inject NavigationManager NavigationManager
-@inject ILogger<RegistrationForm> Logger
+@inject ISiteUserService _userService
+@inject NavigationManager _navigationManager
+@inject ILogger<RegistrationForm> _logger
 
 <form>
     <div class="field">
@@ -123,10 +123,10 @@
 
     public void Register()
     {
-        Logger.LogInformation("Registering new user " + _candidateUsername + "...");
-        UserService.AddUser(_candidateUsername, _candidatePassword);
-        Logger.LogInformation("Done.");
-        NavigationManager.NavigateTo("/registeredok");
+        _logger.LogInformation("Registering new user " + _candidateUsername + "...");
+        _userService.AddUser(_candidateUsername, _candidatePassword);
+        _logger.LogInformation("Done.");
+        _navigationManager.NavigateTo("/registeredok");
     }
 
     public void CleanUp()
@@ -184,7 +184,7 @@
 
     public void CheckUsernameAvailable()
     {
-        if (UserService.IsUsernameAvailable(_candidateUsername)) 
+        if (_userService.IsUsernameAvailable(_candidateUsername)) 
         {
             UsernameCtrl.Main = "is-success";
             UsernameCtrl.Helper = "help is-success";

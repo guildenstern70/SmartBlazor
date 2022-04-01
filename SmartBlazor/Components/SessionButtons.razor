@@ -1,15 +1,15 @@
 ﻿ @**
   
   Project SmartBlazor
-  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
   This software is licensed under MIT License. See LICENSE.
   
  **@
 
 @using SmartBlazor.Service
 
-@inject ISessionService SessionService
-@inject ILogger<SessionButtons> Logger
+@inject ISessionService _sessionService
+@inject ILogger<SessionButtons> _logger
 
 <div class="@_hideOrNot">
 
@@ -39,7 +39,7 @@
 
     protected override async void OnAfterRender(bool firstRender)
     {
-        this._userSession = await SessionService.GetLoggedUser();
+        this._userSession = await _sessionService.GetLoggedUser();
         // Force rendering since state has changed
         this._hideOrNot = "buttons";
         this.StateHasChanged();

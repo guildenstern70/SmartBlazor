@@ -1,7 +1,7 @@
 ﻿/**
  * 
  * Project SmartBlazor
- * Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+ * Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
  * This software is licensed under MIT License. See LICENSE.
  * 
  **/
@@ -21,13 +21,14 @@ public class LocalStorageService : ILocalStorageService
 
     public LocalStorageService(IJSRuntime jsRuntime)
     {
-        _jsRuntime = jsRuntime;
+        this._jsRuntime = jsRuntime;
     }
 
     public async Task<T?> GetItem<T>(string key)
     {
-        var json = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
-
+        string? json = await this._jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+        
+        // This is true before login
         if (json == null)
             return default;
 
@@ -36,13 +37,13 @@ public class LocalStorageService : ILocalStorageService
 
     public async Task SetItem<T>(string key, T value)
     {
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, 
+        await this._jsRuntime.InvokeVoidAsync("localStorage.setItem", key, 
             JsonSerializer.Serialize(value));
     }
 
     public async Task RemoveItem(string key)
     {
-        await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", key);
+        await this._jsRuntime.InvokeVoidAsync("localStorage.removeItem", key);
     }
 }
 

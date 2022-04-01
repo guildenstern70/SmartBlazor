@@ -1,7 +1,7 @@
 /**
  * 
  * Project SmartBlazor
- * Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+ * Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
  * This software is licensed under MIT License. See LICENSE.
  * 
  **/
@@ -21,7 +21,7 @@ public class WeatherForecast
 
     public int TemperatureC { get; set; }
 
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public int TemperatureF => 32 + (int)(this.TemperatureC / 0.5556);
 
     public string? Summary { get; set; }
 }

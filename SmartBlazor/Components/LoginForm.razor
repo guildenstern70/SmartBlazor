@@ -1,17 +1,17 @@
 ﻿ @**
   
   Project SmartBlazor
-  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
   This software is licensed under MIT License. See LICENSE.
   
  **@
  
 @using SmartBlazor.Service
 
-@inject ISiteUserService UserService
-@inject ISessionService  SessionService
-@inject NavigationManager NavigationManager
-@inject ILogger<LoginForm> Logger
+@inject ISiteUserService _userService
+@inject ISessionService  _sessionService
+@inject NavigationManager _navigationManager
+@inject ILogger<LoginForm> _logger
 
 <form>
     <div class="field">
@@ -72,21 +72,21 @@
         _errorMessageStyle = "is-danger is-light is-hidden";
     }
 
-    public async void Login()
+    private async void Login()
     {
-        Logger.LogInformation("User login request...");
-        if (UserService.CheckLogin(_candidateUser, _candidatePassword))
+        _logger.LogInformation("User login request...");
+        if (_userService.CheckLogin(_candidateUser, _candidatePassword))
         {
-            Logger.LogInformation("Login OK, user is " + _candidateUser);
-            await SessionService.Login(_candidateUser);
-            NavigationManager.NavigateTo("/");
+            _logger.LogInformation("Login OK, user is " + _candidateUser);
+            await _sessionService.Login(_candidateUser);
+            _navigationManager.NavigateTo("/");
         }
         else
         {
             _errorMessageStyle = "is-danger is-light";
             _candidateUser = "";
             _candidatePassword = "";
-            Logger.LogWarning("Login error: bad username or password");
+            _logger.LogWarning("Login error: bad username or password");
         }
     }
 

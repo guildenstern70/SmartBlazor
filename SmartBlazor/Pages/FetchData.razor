@@ -1,7 +1,7 @@
-﻿ @**
+﻿@**
   
   Project SmartBlazor
-  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
   This software is licensed under MIT License. See LICENSE.
   
  **@
@@ -13,75 +13,156 @@
 @using Microsoft.EntityFrameworkCore
 @using SmartBlazor.Data
 @using SmartBlazor.Data.Model
-@using SmartBlazor.Service
+
 
 @implements IDisposable
 @inject IDbContextFactory<SmartBlazorDbContext> _dbFactory
 
 <section class="section">
 
-    <SmartBlazor.Components.PageHeader Title="Weather forecast" />
+    <SmartBlazor.Components.PageHeader Title="Weather forecast"/>
 
     <div>
         <p>Weather Forecast Service:</p>
         <div class="mt-4">
             @if (_forecasts == null)
             {
-                <p><em>Loading...</em></p>
+                <p>
+                    <em>Loading...</em>
+                </p>
             }
             else
             {
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Temp. (C)</th>
-                            <th>Temp. (F)</th>
-                            <th>Summary</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Temp. (&deg;C)</th>
+                        <th>Temp. (&deg;F)</th>
+                        <th>Summary</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
                     </thead>
                     <tfoot>
-                        <tr>
-                            <th>Date</th>
-                            <th>Temp. (C)</th>
-                            <th>Temp. (F)</th>
-                            <th>Summary</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Temp. (&deg;CC)</th>
+                        <th>Temp. (&deg;CF)</th>
+                        <th>Summary</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
                     </tfoot>
                     <tbody>
-                        @foreach (var forecast in _forecasts)
-                        {
-                            <tr>
-                                <td>@forecast.Date.ToShortDateString()</td>
-                                <td>@forecast.TemperatureC</td>
-                                <td>@forecast.TemperatureF</td>
-                                <td>@forecast.Summary</td>
-                                <td><button type="button" class="button is-small" 
-                                            @onclick="() => DeleteForecast(forecast)">
-                                            <i class="fas fa-trash"></i>
-                                </button></td>
-                                <td><button type="button" class="button is-small">
-                                    <i class="fas fa-edit"></i>
-                                </button></td>
-                            </tr>
-                        }
+                    @foreach (var forecast in _forecasts)
+                    {
+                        <tr>
+                            <td>@forecast.Date.ToShortDateString()</td>
+                            <td>@forecast.TemperatureC</td>
+                            <td>@forecast.TemperatureF</td>
+                            <td>@forecast.Summary</td>
+                            <td>
+                                <button type="button" class="button is-small"
+                                        @onclick="() => EditForecast(forecast)">
+                                    <span class="icon has-text-info">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="button is-small"
+                                        @onclick="() => DeleteForecast(forecast)">
+                                    <span class="icon has-text-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                </button>
+                            </td>
+
+                        </tr>
+                    }
                     </tbody>
                 </table>
                 <button type="button" class="button is-info" onclick="@AddNewForecast">Add new</button>
             }
         </div>
     </div>
+    <div class="modal @_showEditModal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            @if (_forecastToEdit != null)
+            {
+                <div class="box">
+                <form class="m-2">
+                    <div class="field">
+                        <label class="label">Date</label>
+                        <div class="control">
+                            <input class="input" type="text"
+                                   value="@_forecastToEdit!.Date.ToLongDateString()" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Temperature</label>
+                        <div class="field has-addons">
+                            <p class="control">
+                                <span class="select">
+                                    <select>
+                                        <option>&deg;C</option>
+                                        <option>&deg;F</option>
+                                    </select>
+                                </span>
+                            </p>
+                            <p class="control has-icons-left">
+                                <input class="input is-success" type="text"
+                                       value="@_forecastToEdit!.TemperatureC"/>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-temperature-half"></i>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Summary</label>
+                        <div class="control">
+                            <div class="select">
+                                <select>
+                                    <option>Select description</option>
+                                    @foreach (var summary in SeedWeatherForecasts.Summaries)
+                                    {
+                                        if (_forecastToEdit!.Summary == summary)
+                                        {
+                                            <option selected>@summary</option>
+                                        }
+                                        else
+                                        {
+                                            <option>@summary</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-grouped pt-6">
+                        <div class="control">
+                            <button type="button" class="button is-primary" onclick="@CloseModal">Apply</button>
+                            <button type="button" class="button is-light" onclick="@CloseModal">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            }
+        </div>
+        <button class="modal-close is-large" aria-label="close" onclick="@CloseModal"></button>
+    </div>
 </section>
- 
- 
- @code {
+
+
+@code {
 
     private DbSet<WeatherForecast>? _forecasts;
     private SmartBlazorDbContext? _context;
+    private string _showEditModal = "";
+    private WeatherForecast? _forecastToEdit;
 
     protected override async Task OnInitializedAsync()
     {
@@ -92,19 +173,18 @@
         }
         await base.OnInitializedAsync();
     }
-     
-     private void AddNewForecast()
-     {
-         if (_context?.WeatherForecasts == null) return;
-         _context.Add(new WeatherForecast()
-         {
-             Date = new DateTime(),
-             TemperatureC = 30,
-             Summary = "Freezing"
-             
-         });
-         _context.SaveChanges();
-     }
+
+    private void AddNewForecast()
+    {
+        if (_context?.WeatherForecasts == null) return;
+        _context.Add(new WeatherForecast()
+        {
+            Date = new DateTime(),
+            TemperatureC = 30,
+            Summary = "Freezing"
+        });
+        _context.SaveChanges();
+    }
 
     private void DeleteForecast(WeatherForecast forecast)
     {
@@ -113,8 +193,20 @@
         _context.SaveChanges();
     }
 
+    private void EditForecast(WeatherForecast forecast)
+    {
+        this._showEditModal = "is-active";
+        this._forecastToEdit = forecast;
+    }
+
+    private void CloseModal()
+    {
+        this._showEditModal = "";
+    }
+
     public void Dispose()
     {
         _context?.Dispose();
     }
+
 }

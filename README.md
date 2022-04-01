@@ -6,7 +6,7 @@ A template application featuring Microsoft Blazor Tech with ASP.NET Core 6.x
 
 This code requires:
 
--> Microsoft .NET Core 6.x
+-> Microsoft .NET 6.x
 -> Microsoft ASP.NET Core 6.x
 
 You may download requirements for any platform here: https://dotnet.microsoft.com/download/dotnet/6.0
@@ -16,7 +16,7 @@ You may download requirements for any platform here: https://dotnet.microsoft.co
 
 ### Build as Docker image
 
-    docker build -t smartblazor:1.0 .
+    docker build --platform linux/amd64 -t smartblazor:1.0 .
 
 ### Tag image to be uploaded to a repository
 

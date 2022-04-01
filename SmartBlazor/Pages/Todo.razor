@@ -1,14 +1,13 @@
 ﻿ @**
   
   Project SmartBlazor
-  Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
   This software is licensed under MIT License. See LICENSE.
   
  **@
 
 
 @page "/todo"
-@using SmartBlazor.Data
 @using SmartBlazor.Data.Model
 
 
@@ -18,7 +17,7 @@
 
     <div class="block">
         <ul>
-            @foreach (var todo in todos)
+            @foreach (var todo in _todos)
             {
                 <li>
                     <div class="field">
@@ -35,7 +34,7 @@
         <div class="field">
           <label class="label">Add a new to-do item</label>
           <div class="control">
-            <input class="input" type="text" placeholder="Something to do..." @bind="newTodo" />
+            <input class="input" type="text" placeholder="Something to do..." @bind="_newTodo" />
           </div>
         </div>
         <div class="field">
@@ -47,26 +46,23 @@
 
 
 @code {
-    private List<TodoItem> todos = new();
-    private string? newTodo;
+    private readonly List<TodoItem> _todos = new();
+    private string? _newTodo;
 
-    public string TodoCount
+    private string TodoCount
     {
         get
         {
-            return "ToDo (" + this.todos.Count(todo => !todo.IsDone).ToString() + ")";
+            return "ToDo (" + this._todos.Count(todo => !todo.IsDone).ToString() + ")";
         }
 
     }
 
     private void AddTodo()
     {
-        if (!string.IsNullOrWhiteSpace(newTodo))
-        {
-            todos.Add(new TodoItem { Title = newTodo });
-            newTodo = string.Empty;
-        }
+        if (string.IsNullOrWhiteSpace(_newTodo)) return;
+        _todos.Add(new TodoItem { Title = _newTodo });
+        _newTodo = string.Empty;
     }
-
 }
 

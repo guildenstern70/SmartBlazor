@@ -5,7 +5,7 @@ using System.Diagnostics;
 /**
 * 
 * Project SmartBlazor
-* Copyright (C) 2021 Alessio Saltarin 'alessiosaltarin@gmail.com'
+* Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
 * This software is licensed under MIT License. See LICENSE.
 * 
 **/
@@ -13,7 +13,7 @@ namespace SmartBlazor.Data;
 
 public class SeedWeatherForecasts
 {
-    private static readonly string[] Summaries = new[]
+    public static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
@@ -23,7 +23,7 @@ public class SeedWeatherForecasts
         Debug.WriteLine("Seeding Weather Forecasts...");
         if ((context.WeatherForecasts == null)||!context.WeatherForecasts.Any())
         {
-            var forecasts = GetForecasts(DateTime.Now, totalCount);
+            WeatherForecast[] forecasts = GetForecasts(DateTime.Now, totalCount);
             context.WeatherForecasts?.AddRange(forecasts);
             await context.SaveChangesAsync();
         }
