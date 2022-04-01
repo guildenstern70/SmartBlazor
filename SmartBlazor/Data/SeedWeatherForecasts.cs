@@ -1,14 +1,14 @@
-﻿
-
-using SmartBlazor.Data.Model;
-using System.Diagnostics;
-/**
+﻿/**
 * 
 * Project SmartBlazor
 * Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
 * This software is licensed under MIT License. See LICENSE.
 * 
 **/
+
+using SmartBlazor.Data.Model;
+using System.Diagnostics;
+
 namespace SmartBlazor.Data;
 
 public class SeedWeatherForecasts
@@ -34,7 +34,7 @@ public class SeedWeatherForecasts
         }
     }
     
-    private static WeatherForecast[] GetForecasts(DateTime startDate, int totalCount)
+    public static WeatherForecast[] GetForecasts(DateTime startDate, int totalCount)
     {
         return Enumerable.Range(1, totalCount).Select(index => new WeatherForecast
         {

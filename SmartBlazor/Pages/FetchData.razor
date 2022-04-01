@@ -98,7 +98,8 @@
                         <label class="label">Date</label>
                         <div class="control">
                             <input class="input" type="text"
-                                   value="@_forecastToEdit!.Date.ToLongDateString()" readonly="readonly">
+                                   value="@_forecastToEdit!.Date.ToString("D")"
+                                   readonly="readonly">
                         </div>
                     </div>
                     <div class="field">
@@ -106,15 +107,15 @@
                         <div class="field has-addons">
                             <p class="control">
                                 <span class="select">
-                                    <select>
-                                        <option>&deg;C</option>
-                                        <option>&deg;F</option>
+                                    <select @bind="_temperatureScale">
+                                        <option value="C">&deg;C</option>
+                                        <option value="F">&deg;F</option>
                                     </select>
                                 </span>
                             </p>
                             <p class="control has-icons-left">
                                 <input class="input is-success" type="text"
-                                       value="@_forecastToEdit!.TemperatureC"/>
+                                       @bind-value="@_temperatureWithNoScale"/>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-temperature-half"></i>
                                 </span>
@@ -125,18 +126,11 @@
                         <label class="label">Summary</label>
                         <div class="control">
                             <div class="select">
-                                <select>
+                                <select @bind=_forecastToEdit.Summary>
                                     <option>Select description</option>
                                     @foreach (var summary in SeedWeatherForecasts.Summaries)
                                     {
-                                        if (_forecastToEdit!.Summary == summary)
-                                        {
-                                            <option selected>@summary</option>
-                                        }
-                                        else
-                                        {
-                                            <option>@summary</option>
-                                        }
+                                        <option value="@summary">@summary</option>
                                     }
                                 </select>
                             </div>
@@ -144,7 +138,7 @@
                     </div>
                     <div class="field is-grouped pt-6">
                         <div class="control">
-                            <button type="button" class="button is-primary" onclick="@CloseModal">Apply</button>
+                            <button type="button" class="button is-primary" onclick="@SaveEditForecast">Apply</button>
                             <button type="button" class="button is-light" onclick="@CloseModal">Cancel</button>
                         </div>
                     </div>
@@ -163,6 +157,8 @@
     private SmartBlazorDbContext? _context;
     private string _showEditModal = "";
     private WeatherForecast? _forecastToEdit;
+    private char _temperatureScale = 'C';
+    private int _temperatureWithNoScale = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -177,12 +173,7 @@
     private void AddNewForecast()
     {
         if (_context?.WeatherForecasts == null) return;
-        _context.Add(new WeatherForecast()
-        {
-            Date = new DateTime(),
-            TemperatureC = 30,
-            Summary = "Freezing"
-        });
+        _context.Add(SeedWeatherForecasts.GetForecasts(new DateTime(), 1)[0]);
         _context.SaveChanges();
     }
 
@@ -193,9 +184,25 @@
         _context.SaveChanges();
     }
 
+    private void SaveEditForecast()
+    {
+        if (_context?.WeatherForecasts == null) return;
+        if (_forecastToEdit == null) return;
+        var entity = _context.WeatherForecasts.Find(_forecastToEdit.Id);
+        if (entity == null)
+        {
+            return;
+        }
+        entity.setTemperature(this._temperatureScale, this._temperatureWithNoScale);
+        _context.Entry(entity).CurrentValues.SetValues(_forecastToEdit);
+        this._showEditModal = "";
+    }
+
     private void EditForecast(WeatherForecast forecast)
     {
         this._showEditModal = "is-active";
+        this._temperatureScale = 'C';
+        this._temperatureWithNoScale = forecast.TemperatureC;
         this._forecastToEdit = forecast;
     }
 

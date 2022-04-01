@@ -24,4 +24,16 @@ public class WeatherForecast
     public int TemperatureF => 32 + (int)(this.TemperatureC / 0.5556);
 
     public string? Summary { get; set; }
+
+    public void setTemperature(char scale, int measure)
+    {
+        if (scale is 'f' or 'F')
+        {
+            this.TemperatureC = 5/9 * (measure-32);
+        }
+        else
+        {
+            this.TemperatureC = measure;
+        }
+    }
 }
