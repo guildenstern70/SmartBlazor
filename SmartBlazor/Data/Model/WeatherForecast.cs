@@ -25,7 +25,7 @@ public class WeatherForecast
 
     public string? Summary { get; set; }
 
-    public void setTemperature(char scale, int measure)
+    public void SetTemperature(char scale, int measure)
     {
         if (scale is 'f' or 'F')
         {

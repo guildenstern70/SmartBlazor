@@ -17,138 +17,146 @@
 
 @implements IDisposable
 @inject IDbContextFactory<SmartBlazorDbContext> _dbFactory
+@inject IJSRuntime _js
 
-<section class="section">
-
-    <SmartBlazor.Components.PageHeader Title="Weather forecast"/>
-
-    <div>
-        <p>Weather Forecast Service:</p>
-        <div class="mt-4">
-            @if (_forecasts == null)
-            {
-                <p>
-                    <em>Loading...</em>
-                </p>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (&deg;C)</th>
-                        <th>Temp. (&deg;F)</th>
-                        <th>Summary</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                    </thead>
-                    <tfoot>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (&deg;CC)</th>
-                        <th>Temp. (&deg;CF)</th>
-                        <th>Summary</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                    </tr>
-                    </tfoot>
-                    <tbody>
-                    @foreach (var forecast in _forecasts)
+<SmartBlazor.Components.PageHeader Title="Weather forecast"/>
+<div class="columns">
+    <div class="column">
+        <section class="section">
+            <div>
+                <p>Weather Forecast Service:</p>
+                <div class="mt-4">
+                    @if (_forecasts == null)
                     {
-                        <tr>
-                            <td>@forecast.Date.ToShortDateString()</td>
-                            <td>@forecast.TemperatureC</td>
-                            <td>@forecast.TemperatureF</td>
-                            <td>@forecast.Summary</td>
-                            <td>
-                                <button type="button" class="button is-small"
-                                        @onclick="() => EditForecast(forecast)">
-                                    <span class="icon has-text-info">
-                                        <i class="fas fa-edit"></i>
-                                    </span>
-                                </button>
-                            </td>
-                            <td>
-                                <button type="button" class="button is-small"
-                                        @onclick="() => DeleteForecast(forecast)">
-                                    <span class="icon has-text-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                </button>
-                            </td>
-
-                        </tr>
+                        <p>
+                            <em>Loading...</em>
+                        </p>
                     }
-                    </tbody>
-                </table>
-                <button type="button" class="button is-info" onclick="@AddNewForecast">Add new</button>
-            }
-        </div>
-    </div>
-    <div class="modal @_showEditModal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            @if (_forecastToEdit != null)
-            {
-                <div class="box">
-                <form class="m-2">
-                    <div class="field">
-                        <label class="label">Date</label>
-                        <div class="control">
-                            <input class="input" type="text"
-                                   value="@_forecastToEdit!.Date.ToString("D")"
-                                   readonly="readonly">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Temperature</label>
-                        <div class="field has-addons">
-                            <p class="control">
-                                <span class="select">
-                                    <select @bind="_temperatureScale">
-                                        <option value="C">&deg;C</option>
-                                        <option value="F">&deg;F</option>
-                                    </select>
-                                </span>
-                            </p>
-                            <p class="control has-icons-left">
-                                <input class="input is-success" type="text"
-                                       @bind-value="@_temperatureWithNoScale"/>
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-temperature-half"></i>
-                                </span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Summary</label>
-                        <div class="control">
-                            <div class="select">
-                                <select @bind=_forecastToEdit.Summary>
-                                    <option>Select description</option>
-                                    @foreach (var summary in SeedWeatherForecasts.Summaries)
-                                    {
-                                        <option value="@summary">@summary</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-grouped pt-6">
-                        <div class="control">
-                            <button type="button" class="button is-primary" onclick="@SaveEditForecast">Apply</button>
-                            <button type="button" class="button is-light" onclick="@CloseModal">Cancel</button>
-                        </div>
-                    </div>
-                </form>
+                    else
+                    {
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Temp. (&deg;C)</th>
+                                <th>Temp. (&deg;F)</th>
+                                <th>Summary</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            <tr>
+                                <th>Date</th>
+                                <th>Temp. (&deg;CC)</th>
+                                <th>Temp. (&deg;CF)</th>
+                                <th>Summary</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach (var forecast in _forecasts)
+                            {
+                                <tr>
+                                    <td>@forecast.Date.ToShortDateString()</td>
+                                    <td>@forecast.TemperatureC</td>
+                                    <td>@forecast.TemperatureF</td>
+                                    <td>@forecast.Summary</td>
+                                    <td>
+                                        <button type="button" class="button is-small"
+                                                @onclick="() => EditForecast(forecast)">
+                                            <span class="icon has-text-info">
+                                                <i class="fas fa-edit"></i>
+                                            </span>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="button is-small"
+                                                @onclick="() => DeleteForecast(forecast)">
+                                            <span class="icon has-text-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </span>
+                                        </button>
+                                    </td>
+        
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                        <button type="button" class="button is-info" onclick="@AddNewForecast">Add new</button>
+                    }
+                </div>
             </div>
-            }
-        </div>
-        <button class="modal-close is-large" aria-label="close" onclick="@CloseModal"></button>
+            <div class="modal @_showEditModal">
+                <div class="modal-background"></div>
+                <div class="modal-content">
+                    @if (_forecastToEdit != null)
+                    {
+                        <div class="box">
+                            <form class="m-2">
+                                <div class="field">
+                                    <label class="label">Date</label>
+                                    <div class="control">
+                                        <input class="input" type="text"
+                                               value="@_forecastToEdit!.Date.ToString("D")"
+                                               readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Temperature</label>
+                                    <div class="field has-addons">
+                                        <p class="control">
+                                            <span class="select">
+                                                <select @bind="_temperatureScale">
+                                                    <option value="C">&deg;C</option>
+                                                    <option value="F">&deg;F</option>
+                                                </select>
+                                            </span>
+                                        </p>
+                                        <p class="control has-icons-left">
+                                            <input class="input is-success" type="text"
+                                                   @bind-value="@_temperatureWithNoScale"/>
+                                            <span class="icon is-small is-left">
+                                                <i class="fas fa-temperature-half"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Summary</label>
+                                    <div class="control">
+                                        <div class="select">
+                                            <select @bind=_forecastToEdit.Summary>
+                                                <option>Select description</option>
+                                                @foreach (var summary in SeedWeatherForecasts.Summaries)
+                                                {
+                                                    <option value="@summary">@summary</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field is-grouped pt-6">
+                                    <div class="control">
+                                        <button type="button" class="button is-primary" onclick="@SaveEditForecast">Apply</button>
+                                        <button type="button" class="button is-light" onclick="@CloseModal">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                </div>
+                <button class="modal-close is-large" aria-label="close" onclick="@CloseModal"></button>
+            </div>
+        </section>
     </div>
-</section>
+    <div class="column">
+        <section class="chart">
+            <LineChart @ref="_lineChart" TItem="double" />
+        </section>
+    </div>
+</div>
 
 
 @code {
@@ -159,7 +167,13 @@
     private WeatherForecast? _forecastToEdit;
     private char _temperatureScale = 'C';
     private int _temperatureWithNoScale = 0;
-
+    
+    // Chart
+    private LineChart<double>? _lineChart;
+    string[] Labels = { "Red", "Blue", "Yellow", "Green", "Purple", "Orange" };
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba( 255, 99, 132, 0.2f ), ChartColor.FromRgba( 54, 162, 235, 0.2f ), ChartColor.FromRgba( 255, 206, 86, 0.2f ), ChartColor.FromRgba( 75, 192, 192, 0.2f ), ChartColor.FromRgba( 153, 102, 255, 0.2f ), ChartColor.FromRgba( 255, 159, 64, 0.2f ) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba( 255, 99, 132, 1f ), ChartColor.FromRgba( 54, 162, 235, 1f ), ChartColor.FromRgba( 255, 206, 86, 1f ), ChartColor.FromRgba( 75, 192, 192, 1f ), ChartColor.FromRgba( 153, 102, 255, 1f ), ChartColor.FromRgba( 255, 159, 64, 1f ) };
+    
     protected override async Task OnInitializedAsync()
     {
         _context = await _dbFactory.CreateDbContextAsync();
@@ -168,6 +182,48 @@
             _forecasts = _context.WeatherForecasts;
         }
         await base.OnInitializedAsync();
+    }
+    
+    async Task HandleRedraw()
+    {
+        await _lineChart.Clear();
+
+        await _lineChart.AddLabelsDatasetsAndUpdate( Labels, GetLineChartDataset() );
+    }
+    
+    List<double> RandomizeData()
+    {
+        var r = new Random( DateTime.Now.Millisecond );
+
+        return new List<double> { 
+            r.Next( 3, 50 ) * r.NextDouble(),
+            r.Next( 3, 50 ) * r.NextDouble(),
+            r.Next( 3, 50 ) * r.NextDouble(),
+            r.Next( 3, 50 ) * r.NextDouble(),
+            r.Next( 3, 50 ) * r.NextDouble(),
+            r.Next( 3, 50 ) * r.NextDouble() };
+    }
+    
+    LineChartDataset<double> GetLineChartDataset()
+    {
+        return new LineChartDataset<double>
+        {
+            Label = "# of randoms",
+            Data = RandomizeData(),
+            BackgroundColor = backgroundColors,
+            BorderColor = borderColors,
+            Fill = true,
+            PointRadius = 3,
+            CubicInterpolationMode = "monotone",
+        };
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if ( firstRender )
+        {
+            await HandleRedraw();
+        }
     }
 
     private void AddNewForecast()
@@ -193,7 +249,7 @@
         {
             return;
         }
-        entity.setTemperature(this._temperatureScale, this._temperatureWithNoScale);
+        entity.SetTemperature(this._temperatureScale, this._temperatureWithNoScale);
         _context.Entry(entity).CurrentValues.SetValues(_forecastToEdit);
         this._showEditModal = "";
     }

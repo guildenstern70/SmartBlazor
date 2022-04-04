@@ -9,6 +9,9 @@
 using SmartBlazor.Data;
 using SmartBlazor.Service;
 using Microsoft.EntityFrameworkCore;
+using Blazorise;
+using Blazorise.Bulma;
+using Blazorise.Icons.FontAwesome;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,15 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<ISiteUserService, SiteUserService>();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+
+// Charts and UI
+builder.Services
+    .AddBlazorise( options =>
+    {
+        options.Immediate = true;
+    } )
+    .AddBulmaProviders()
+    .AddFontAwesomeIcons();
 
 // EF Core 
 builder.Services.AddDbContextFactory<SmartBlazorDbContext>(opt =>
