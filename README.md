@@ -2,14 +2,14 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A template application featuring Microsoft Blazor Tech with ASP.NET Core 6.x
+A template application featuring Microsoft Blazor Tech with ASP.NET Core 7.x with
 
-This code requires:
+- Entity Framework Core - https://learn.microsoft.com/en-us/ef/core/
+- Bulma CSS Framework - https://bulma.io/
+- Blazorise UI Framework - https://blazorise.com/
+- SQLite DB - https://www.sqlite.org/index.html
 
--> Microsoft .NET 6.x
--> Microsoft ASP.NET Core 6.x
-
-You may download requirements for any platform here: https://dotnet.microsoft.com/download/dotnet/6.0
+You may download requirements for any platform here: https://dotnet.microsoft.com/download/dotnet/7.0
 
 
 ## Container
