@@ -1,7 +1,7 @@
 ﻿@**
   
   Project SmartBlazor
-  Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  Copyright (C) 2022-23 Alessio Saltarin 'alessiosaltarin@gmail.com'
   This software is licensed under MIT License. See LICENSE.
   
  **@
@@ -16,8 +16,7 @@
 
 
 @implements IDisposable
-@inject IDbContextFactory<SmartBlazorDbContext> _dbFactory
-@inject IJSRuntime _js
+@inject IDbContextFactory<SmartBlazorDbContext> DbFactory
 
 <SmartBlazor.Components.PageHeader Title="Weather forecast"/>
 <div class="columns">
@@ -176,7 +175,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        _context = await _dbFactory.CreateDbContextAsync();
+        _context = await DbFactory.CreateDbContextAsync();
         if (_context?.WeatherForecasts != null)
         {
             _forecasts = _context.WeatherForecasts;
@@ -186,9 +185,11 @@
     
     async Task HandleRedraw()
     {
-        await _lineChart.Clear();
-
-        await _lineChart.AddLabelsDatasetsAndUpdate( Labels, GetLineChartDataset() );
+        if (this._lineChart != null)
+        {
+            await _lineChart.Clear();
+            await _lineChart.AddLabelsDatasetsAndUpdate( Labels, GetLineChartDataset() );
+        }
     }
     
     List<double> RandomizeData()

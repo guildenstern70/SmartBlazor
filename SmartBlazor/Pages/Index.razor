@@ -1,21 +1,27 @@
 ﻿ @**
   
   Project SmartBlazor
-  Copyright (C) 2022 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  Copyright (C) 2022-23 Alessio Saltarin 'alessiosaltarin@gmail.com'
   This software is licensed under MIT License. See LICENSE.
   
  **@
 
 @page "/"
+@using SmartBlazor.Components
+@using SmartBlazor.Data.Enums
 
 <PageTitle>Index</PageTitle>
 
 <section class="section">
 
     <SmartBlazor.Components.PageHeader Title="SmartBlazor" />
-    
     <div class="is-size-4">
-    A website template done with <strong>Blazor & Bulma</strong>!
+        A website template done with <strong>Blazor & Bulma</strong>!
+    </div>
+    <div class="footer">
+        <AppInfo type="@AppInfoType.Text"></AppInfo>
     </div>
 
 </section>
+ 
+ 

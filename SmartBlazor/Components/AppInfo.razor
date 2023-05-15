@@ -1,0 +1,68 @@
+ @**
+  
+  Project SmartBlazor
+  Copyright (C) 2022-23 Alessio Saltarin 'alessiosaltarin@gmail.com'
+  This software is licensed under MIT License. See LICENSE.
+  
+ **@
+ 
+@using System.Reflection
+@using System.Runtime.InteropServices
+@using SmartBlazor.Data.Enums
+
+@if (Type == AppInfoType.Table)
+{
+    <div class="pt-6 pl-3">
+        <table class="table infotable">
+            <tbody>
+                <tr>
+                    <td>
+                        <b>e-Mov Home</b>
+                    </td>
+                    <td class="has-text-success">v.@_version</td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Platform</b>
+                    </td>
+                    <td class="has-text-success">@_sdkVersion</td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Environment</b>
+                    </td>
+                    <td class="has-text-success">@_environment</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <small>
+        SmartBlazor <span class="has-text-info">v.@_version</span>
+        | Platform <span class="has-text-info">@_sdkVersion </span>
+        | Environment <span class="has-text-info">@_environment</span>
+    </small>
+}
+
+
+
+@code
+{
+    [Parameter]
+    public AppInfoType? Type { get; set; } = AppInfoType.Table;
+
+    private string? _version;
+    private string? _environment;
+    private string? _sdkVersion;
+    
+    protected override void OnInitialized()
+    {
+        var versionInfo = Assembly.GetEntryAssembly()?.GetName().Version;
+        this._version = versionInfo != null ? versionInfo.ToString() : "?";
+        this._environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        this._sdkVersion = RuntimeInformation.FrameworkDescription;
+    }
+    
+}
